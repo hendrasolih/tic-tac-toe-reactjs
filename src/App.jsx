@@ -3,23 +3,26 @@ import GameBoard from "./components/GameBoard.jsx";
 import Log from "./components/Log.jsx";
 import { useState } from "react";
 
+function deriveActivePlayer(gameTurns) {
+  let currentPlayer = "X";
+
+  if (gameTurns.length > 0 && gameTurns[0].player === "X") {
+    currentPlayer = "O";
+  }
+
+  return currentPlayer;
+}
+
 function App() {
   const [gameTruns, setGameTruns] = useState([]);
-  const [activePlayer, setActivePlayer] = useState("X");
+  const activePlayer = deriveActivePlayer(gameTruns)
 
   function handleSelectSquare(rowIndex, colIndex) {
-    setActivePlayer((currActivePlayer) =>
-      currActivePlayer === "X" ? "O" : "X"
-    );
     setGameTruns((prevTruns) => {
-      let currentPlayer = "X";
-
-      if (prevTruns.length > 0 && prevTruns[0].player === "X") {
-        currentPlayer = "O";
-      }
+      const currentActivePlayer = deriveActivePlayer(prevTruns);
 
       const updatedTurns = [
-        { square: { row: rowIndex, col: colIndex }, player: currentPlayer },
+        { square: { row: rowIndex, col: colIndex }, player: currentActivePlayer },
         ...prevTruns,
       ];
 
